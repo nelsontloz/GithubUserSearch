@@ -1,0 +1,7 @@
+<div>
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <label for="search-term">Search Github users</label>
+    <input id="search-term" type="text" placeholder="Type at least 3 characters..." formControlName="input">
+    <button type="submit" [disabled]="searchForm.invalid">Search</button>
+  </form>
+</div>
