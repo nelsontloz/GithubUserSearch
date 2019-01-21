@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
 import {IResponse} from './IResponse';
@@ -13,7 +13,7 @@ export class SearchUsersService {
 
   searchUsers(searchTerm: string, itemsPerPage?: number, page?: number): Observable<IResponse> {
     searchTerm = searchTerm.trim();
-    let httpParams = new HttpParams().set('access_token', 'c3c75ce9886ea8418f42e933b5829ad4a360a59f');
+    let httpParams = new HttpParams();
     httpParams = httpParams.append('q', searchTerm);
     if (itemsPerPage) {
       httpParams = httpParams.append('per_page', itemsPerPage.toString());

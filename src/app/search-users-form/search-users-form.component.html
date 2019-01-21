@@ -1,11 +1,37 @@
 <div class="search-users-form">
-  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-    <input id="search-term" type="text" placeholder="Type at least 3 characters..." formControlName="input" autocomplete="off" (blur)="onInputBlur()">
-    <button type="submit" [disabled]="searchForm.invalid">Search</button>
+  <div>
+    <p>
+      <span>Due Github rate limitations for unauthenticated request is recommended to use a personal access-token</span>
+      <br>
+      <span>please check <a href="https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/">"How to get a personal accesss token"</a></span>
+    </p>
+  </div>
+  <p>
+    <input type="text" (input)="onAccessTokenInput($event)" placeholder="accessToken">
+  </p>
+
+  <form [formGroup]="searchForm">
+    <input id="search-term"
+           type="text"
+           placeholder="Type at least 3 characters..."
+           formControlName="input"
+           autocomplete="off"
+           (blur)="onInputBlur()"
+           (focus)="onInputFocus()"
+           #searchInput>
     <div class="menu" [hidden]="(foundUsers | async)?.length < 1 || !showList">
-      <div class="menu-item" *ngFor="let foundUser of foundUsers | async" (click)="onUserSelected(foundUser)" (mousedown)="onItemMouseDown()" (mouseup)="onItemMouseUp()">
+      <div class="menu-item" *ngFor="let foundUser of foundUsers | async" (mousedown)="onItemMouseDown(foundUser)">
         <span>{{ foundUser.login }}</span>
       </div>
     </div>
   </form>
+
+  <div *ngIf="selectedUser">
+    <div class="card">
+      <img class="picture" [src]="selectedUser.avatar_url" [alt]="selectedUser.login">
+      <h1>{{ selectedUser.login }}</h1>
+      <p><a [href]="selectedUser.html_url">Github link</a></p>
+      <p>Score: {{ selectedUser.score }}</p>
+    </div>
+  </div>
 </div>
