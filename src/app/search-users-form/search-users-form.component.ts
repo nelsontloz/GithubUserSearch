@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {SearchUsersService} from '../search-users.service';
-import {debounce, debounceTime, map} from 'rxjs/operators';
+import {SearchUsersService} from '../services/search-users.service';
+import {debounceTime, filter, map, skipUntil, skipWhile, takeUntil, takeWhile} from 'rxjs/operators';
+import {flatMap} from 'rxjs/internal/operators';
+import {Observable, Subject} from 'rxjs';
+import {IResponse} from '../services/IResponse';
+import {IUser} from '../services/IUser';
 
 @Component({
   selector: 'app-search-users-form',
@@ -11,6 +15,10 @@ import {debounce, debounceTime, map} from 'rxjs/operators';
 export class SearchUsersFormComponent implements OnInit {
 
   searchForm: FormGroup;
+  foundUsers: Observable<IUser[]>;
+  showList = false;
+
+  private listIsBeenClicked = false;
 
   constructor(private searchUsersService: SearchUsersService) {
     this.searchForm = new FormGroup({
@@ -21,21 +29,43 @@ export class SearchUsersFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.searchForm.valueChanges
+    const debouncedForm = this.searchForm.valueChanges
       .pipe(
         debounceTime(400),
-        map(data => data.input)
-      )
-      .subscribe((input) => {
-        console.log(input);
-      });
+        filter((data) => {
+          // not emitting values when form is invalid (les than 3 characters)
+          return this.searchForm.valid;
+        })
+      );
+
+    this.foundUsers = debouncedForm.pipe(
+      flatMap((data) => {
+        return this.searchUsersService.searchUsers(data.input, 10);
+      }),
+      map((response: IResponse) => {
+        this.showList = true;
+        return <IUser[]>response.items;
+      })
+    );
   }
 
   onSubmit() {
-    const input = this.searchForm.value.input;
-    this.searchUsersService.searchUsers(input).subscribe((response) => {
-      console.log(response);
-    });
+  }
+
+  onInputBlur() {
+    this.showList = this.listIsBeenClicked;
+  }
+
+  onUserSelected(selectedUser: IUser) {
+    console.log(selectedUser);
+  }
+
+  onItemMouseDown() {
+    this.listIsBeenClicked = true;
+  }
+
+  onItemMouseUp() {
+    this.listIsBeenClicked = false;
   }
 
 }

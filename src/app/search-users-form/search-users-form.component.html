@@ -1,7 +1,11 @@
-<div>
+<div class="search-users-form">
   <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-    <label for="search-term">Search Github users</label>
-    <input id="search-term" type="text" placeholder="Type at least 3 characters..." formControlName="input">
+    <input id="search-term" type="text" placeholder="Type at least 3 characters..." formControlName="input" autocomplete="off" (blur)="onInputBlur()">
     <button type="submit" [disabled]="searchForm.invalid">Search</button>
+    <div class="menu" [hidden]="(foundUsers | async)?.length < 1 || !showList">
+      <div class="menu-item" *ngFor="let foundUser of foundUsers | async" (click)="onUserSelected(foundUser)" (mousedown)="onItemMouseDown()" (mouseup)="onItemMouseUp()">
+        <span>{{ foundUser.login }}</span>
+      </div>
+    </div>
   </form>
 </div>
