@@ -8,7 +8,7 @@ import { SearchUsersFormComponent } from './search-users-form/search-users-form.
 import { ReactiveFormsModule } from '@angular/forms';
 import { SearchUsersService } from './services/search-users.service';
 import { AuthService } from './services/auth.service';
-import { InterceptorService } from './interceptor.service';
+import { InterceptorService } from './services/interceptor.service';
 
 @NgModule({
   declarations: [

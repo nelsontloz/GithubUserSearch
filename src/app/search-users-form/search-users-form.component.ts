@@ -4,8 +4,8 @@ import { SearchUsersService } from '../services/search-users.service';
 import { catchError, debounceTime, filter, map, share } from 'rxjs/operators';
 import { flatMap } from 'rxjs/internal/operators';
 import { fromEvent, Observable, EMPTY } from 'rxjs';
-import { IResponse } from '../services/IResponse';
-import { IUser } from '../services/IUser';
+import { IResponse } from '../interfaces/IResponse';
+import { IUser } from '../interfaces/IUser';
 import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 
