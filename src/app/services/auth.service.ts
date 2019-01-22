@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 
-// c3c75ce9886ea8418f42e933b5829ad4a360a59f
-
 export class AuthService {
   private accessToken: string;
 
