@@ -1,22 +1,28 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SearchUsersFormComponent } from './search-users-form.component';
+import {AuthService} from '../services/auth.service';
+import {SearchUsersService} from '../services/search-users.service';
+
+class MockSearchUsersService {}
+class MockAuthService {}
 
 describe('SearchUsersFormComponent', () => {
   let component: SearchUsersFormComponent;
-  let fixture: ComponentFixture<SearchUsersFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SearchUsersFormComponent ]
+      providers: [
+        SearchUsersFormComponent,
+        { provide: SearchUsersService, useClass: MockSearchUsersService },
+        { provide: AuthService, useClass: MockAuthService }
+      ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchUsersFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = TestBed.get(SearchUsersFormComponent);
   });
 
   it('should create', () => {
